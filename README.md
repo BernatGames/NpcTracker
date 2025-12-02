@@ -11,7 +11,11 @@ Available commands:
 The re-tracking feature might fail if you reach the destination and the NPC is not up. Since there's no in-game message, I still haven't found how to re-track in this scenario. This is typically the case for scarce or single spawn NPCs.
 
 ### Installation
-Download the attached zip file, then extract the contents into your World of Warcraft/Interface/AddOns directory.
+Download this repository, then extract the `NpcTracker` subdirectory from the `src` directory into your `World of Warcraft/Interface/AddOns` directory.
+
+### Download
+[Github](https://github.com/BernatGames/NpcTracker)
 
 ### Additional comments
 Thanks to all the people who have contributed addons to the server, they are very appreciated :). Also thanks to Scoots, Qt and Gescht, whose addons I've peeked into for developing this.
+Disclaimer: this is my first addon.
