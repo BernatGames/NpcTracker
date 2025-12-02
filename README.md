@@ -18,4 +18,3 @@ Download this repository, then extract the `NpcTracker` subdirectory from the `s
 
 ### Additional comments
 Thanks to all the people who have contributed addons to the server, they are very appreciated :). Also thanks to Scoots, Qt and Gescht, whose addons I've peeked into for developing this.
-Disclaimer: this is my first addon.
