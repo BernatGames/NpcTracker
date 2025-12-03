@@ -20,7 +20,7 @@ Available commands:
 Download this repository, then extract the `NpcTracker` subdirectory from the `src` directory into your `World of Warcraft/Interface/AddOns` directory.
 
 ### Download
-[Github](https://github.com/BernatGames/NpcTracker)
+[Github]([https://github.com/BernatGames/NpcTracker](https://github.com/BernatGames/NpcTracker/releases/latest))
 
 ### Additional comments
 Thanks to all the people who have contributed addons to the server, they are very appreciated :). Also thanks to Scoots, Qt and Gescht, whose addons I've peeked into for developing this.
