@@ -4,6 +4,9 @@
 ## Author: Bernat
 ## Version: 1.0.0
 ## SavedVariables:
-## SavedVariablesPerCharacter:
+## SavedVariablesPerCharacter: npcTrackerDB
 
-NpcTracker.lua
+init.lua
+functions.lua
+events.lua
+commands.lua
