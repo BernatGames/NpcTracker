@@ -1,14 +1,20 @@
 # NpcTracker
-This addon will track an NPC by executing another `.findnpc` command every time the NPC is found.
+This addon will track an NPC by executing another `.findnpc` command every time the NPC is found, and periodically.
 
-This is useful, for example, if farming Oshu'gun Crystal Powder Sample from Shattered Rumbler, since you want to keep killing them for a while, not just once.
+This is useful, for example, if farming Oshu'gun Crystal Powder Sample from Shattered Rumbler, since you want to keep killing them for a while, not just once. Also, if looking for several NPCs, such as all rares in a zone.
 
 ### Usage
 Available commands:
-* `/track npcName` - Tracks an NPC until asked to stop.
-* `/untrack` - Stops tracking an NPC.
-`/track %t` works if you're targetting the NPC.
-The re-tracking feature might fail if you reach the destination and the NPC is not up. Since there's no in-game message, I still haven't found how to re-track in this scenario. This is typically the case for scarce or single spawn NPCs.
+* `/track stop` - Stops tracking.
+* `/track start` - Starts tracking the NPC list.
+* `/track npc <npcName>` - Tracks npcName.
+* `/track add <npcName>` - Adds npcName to the list of NPCs to track.
+* `/track remove <npcName>` - Removes npcName from the list of NPCs to track.
+* `/track clear` - Clears the list of NPCs to track.
+* `/track list` - Lists NPCs in the list of NPCs to track.
+* `/track interval <newInterval>` - Updates the tracking interval (<newInterval> in seconds).
+
+`%t` can be used as a parameter when providing NPC names. List and tracking interval will be saved per character across sessions.
 
 ### Installation
 Download this repository, then extract the `NpcTracker` subdirectory from the `src` directory into your `World of Warcraft/Interface/AddOns` directory.
