@@ -1,0 +1,12 @@
+## Interface: 30300
+## Title: NpcTracker
+## Notes: Tracks an NPC until told not to.
+## Author: Bernat
+## Version: 1.0.0
+## SavedVariables:
+## SavedVariablesPerCharacter: npcTrackerDB
+
+init.lua
+functions.lua
+events.lua
+commands.lua
