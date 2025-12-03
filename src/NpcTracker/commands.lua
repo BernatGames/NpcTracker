@@ -12,6 +12,7 @@ local setTimerInterval = ns.setTimerInterval
 local startTrackingList = ns.startTrackingList
 local stopTracking = ns.stopTracking
 local trackNpc = ns.trackNpc
+local toggleDebug = ns.toggleDebug
 
 
 -- Commands
@@ -54,6 +55,9 @@ SlashCmdList["TRACK"] = function(msg)
             else
                 setTimerInterval(rest)
             end
+        elseif (command == "debug") then
+            prettyPrint("Toggling debug mode.")
+            toggleDebug()
         else
 			prettyPrintError("Wrong command: " .. (command or "nil") .. ".")
         end

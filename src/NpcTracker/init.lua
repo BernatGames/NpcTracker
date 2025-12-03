@@ -4,7 +4,7 @@ ns.npcTrackerDB = {
     trackingName = "",
     trackingList = {},
     timerInterval = 5, -- in seconds
-    debugMode = false,
+    debugMode = true,
 }
 
 ns.TrackingModeTypes = {
@@ -16,6 +16,10 @@ ns.TrackingModeTypes = {
 ns.timeElapsed = ns.npcTrackerDB.timerInterval
 
 ns.trackingMode = ns.TrackingModeTypes.DISABLED
+
+ns.trackingListCurrentIndex = nil
+
+ns.possibleLocationSkip = false
 
 ns.eventsFrame = CreateFrame('Frame', 'NpcTrackerEventsFrame', UIParent)
 ns.eventsFrame:RegisterEvent("ADDON_LOADED")

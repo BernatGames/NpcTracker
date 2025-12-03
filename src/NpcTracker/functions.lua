@@ -15,16 +15,16 @@ local function prettyPrintError(s)
 end
 
 local function printDebug(s)
-    if (npcTrackerDB.debugMode) then prettyPrintInfo("|cff0000ff" .. s or "nil") end
+    if (ns.npcTrackerDB.debugMode) then prettyPrintInfo("|cff0000ffDebug:|r " .. (s or "nil")) end
 end
 
 local function isEmpty(s)
-    printDebug("isEmpty("..(s or "nil")..")")
+    --printDebug("isEmpty("..(s or "nil")..")")
     return s == nil or s == ''
 end
 
 function indexOf(array, value)
-    printDebug("indexOf(..., "..(value or "nil")..")")
+    --printDebug("indexOf(..., "..(value or "nil")..")")
     for i, v in ipairs(array) do
         if v == value then
             return i
@@ -53,11 +53,12 @@ end
 
 local function startTrackingList()
     printDebug("startTrackingList()")
-    if (#npcTrackerDB.trackingList > 0) then
+    if (#ns.npcTrackerDB.trackingList > 0) then
         ns.trackingMode = ns.TrackingModeTypes.LIST
-        -- npcTrackerDB.trackingNpcName = npcTrackerDB.trackingList[ns.trackingListCurrentIndex]
+        -- ns.npcTrackerDB.trackingNpcName = ns.npcTrackerDB.trackingList[ns.trackingListCurrentIndex]
         registerEvents()
-        SendChatMessage('.findnpc ' .. npcTrackerDB.trackingNpcName, 'SAY')
+        ns.possibleLocationSkip = false
+        SendChatMessage('.findnpc ' .. ns.npcTrackerDB.trackingNpcName, 'SAY')
 		prettyPrint("Started tracking (LIST).")
     else
 		prettyPrintError("Nothing to track (LIST).")
@@ -69,10 +70,10 @@ local function trackNpc(npcName)
     if (not isEmpty(npcName)) then
         npcName = string.gsub(npcName, "%%t", GetUnitName("target"))
         ns.trackingMode = ns.TrackingModeTypes.NPC
-        npcTrackerDB.trackingNpcName = npcName or npcTrackerDB.trackingNpcName
+        ns.npcTrackerDB.trackingNpcName = npcName or ns.npcTrackerDB.trackingNpcName
         registerEvents()
-        SendChatMessage('.findnpc ' .. npcTrackerDB.trackingNpcName, 'SAY')
-		prettyPrint("Started tracking (NPC): " .. npcTrackerDB.trackingNpcName .. ".")
+        SendChatMessage('.findnpc ' .. ns.npcTrackerDB.trackingNpcName, 'SAY')
+		prettyPrint("Started tracking (NPC): " .. ns.npcTrackerDB.trackingNpcName .. ".")
     else
         prettyPrintError("Nothing to track (NPC).")
     end
@@ -80,12 +81,18 @@ end
 
 local function addNpcToTrackingList(npcName)
     printDebug("addNpcToTrackingList("..(npcName or "nil")..")")
-    if (not isEmpty(npcName) and indexOf(npcTrackerDB.trackingList, npcName) == nil) then
+    if (isEmpty(npcName)) then
+        prettyPrintError("Nothing to add.")
+    else
         npcName = string.gsub(npcName, "%%t", GetUnitName("target"))
-        table.insert(npcTrackerDB.trackingList, npcName)
-        ns.trackingListCurrentIndex = 1
-		npcTrackerDB.trackingNpcName = npcTrackerDB.trackingList[ns.trackingListCurrentIndex]
-		prettyPrint("Added to tracking list: " .. npcName .. ".")
+        if (indexOf(ns.npcTrackerDB.trackingList, npcName) == nil) then
+            table.insert(ns.npcTrackerDB.trackingList, npcName)
+            ns.trackingListCurrentIndex = 1
+            ns.npcTrackerDB.trackingNpcName = ns.npcTrackerDB.trackingList[ns.trackingListCurrentIndex]
+            prettyPrint("Added to tracking list: " .. npcName .. ".")
+        else
+            prettyPrintError("Already tracking " .. npcName .. ".")
+        end
     end
 end
 
@@ -93,15 +100,15 @@ local function removeNpcFromTrackingList(npcName)
     printDebug("removeNpcFromTrackingList("..(npcName or "nil")..")")
     if(not isEmpty(npcName)) then
         npcName = string.gsub(npcName, "%%t", GetUnitName("target"))
-        local i = indexOf(npcTrackerDB.trackingList, npcName)
+        local i = indexOf(ns.npcTrackerDB.trackingList, npcName)
         if (i ~= nil) then
-            table.remove(npcTrackerDB.trackingList, i)
-            if (#npcTrackerDB.trackingList > 0) then
+            table.remove(ns.npcTrackerDB.trackingList, i)
+            if (#ns.npcTrackerDB.trackingList > 0) then
                 ns.trackingListCurrentIndex = 1
-                npcTrackerDB.trackingNpcName = npcTrackerDB.trackingList[ns.trackingListCurrentIndex]
+                ns.npcTrackerDB.trackingNpcName = ns.npcTrackerDB.trackingList[ns.trackingListCurrentIndex]
             else
                 ns.trackingListCurrentIndex = nil
-                npcTrackerDB.trackingNpcName = ""
+                ns.npcTrackerDB.trackingNpcName = ""
             end
             prettyPrint("Removed from tracking list: " .. npcName .. ".")
         else
@@ -114,7 +121,7 @@ end
 
 local function clearTrackingList()
     printDebug("clearTrackingList()")
-    npcTrackerDB.trackingList = {}
+    ns.npcTrackerDB.trackingList = {}
     ns.trackingListCurrentIndex = nil
 	prettyPrint("List cleared.")
 end
@@ -122,50 +129,63 @@ end
 local function listTrackingList()
     printDebug("listTrackingList()")
     prettyPrint("Tracking list:")
-    for _, npcName in ipairs(npcTrackerDB.trackingList) do
+    for _, npcName in ipairs(ns.npcTrackerDB.trackingList) do
         print("  |ccccccccc" .. npcName)
     end
 end
 
 local function npcFound(msg)
-    printDebug("parseNpcFound("..(msg or "nil")..")")
-    printDebug (string.match(msg, "You have found ([^.]*)\."))
+    --printDebug("parseNpcFound("..(msg or "nil")..")")
+    --printDebug (string.match(msg, "You have found ([^.]*)\."))
     local foundNpcName = string.match(msg, "You have found ([^.]*)\.")
     if (not isEmpty(foundNpcName)) then
-        printDebug('Found ' .. foundNpcName)
+        --printDebug('NPC name found: ' .. foundNpcName)
         return true
     else
-        printDebug('NPC not found')
+        --printDebug('NPC name not found')
+        return false
+    end
+end
+
+local function npcFoundAway(msg)
+    printDebug("npcFoundAway("..(msg or "nil")..")")
+    printDebug (string.match(msg, "(.+) is %d+ yards away from here!"))
+    local foundNpcName = string.match(msg, "(.+) is %d+ yards away from here!")
+    if (not isEmpty(foundNpcName)) then
+        printDebug('NPC name found yards away: ' .. foundNpcName)
+        return true
+    else
+        printDebug('NPC name not found yards away')
         return false
     end
 end
 
 local function npcPossibleLocation(msg)
-    printDebug("npcPossibleLocation("..(msg or "nil")..")")
-    printDebug (string.match(msg, "A possible location for ([^.]*) has been marked on your map\."))
-    local foundNpcName = string.match(msg, "A possible location for ([^.]*) has been marked on your map\.")
+    --printDebug("npcPossibleLocation("..(msg or "nil")..")")
+    --printDebug (string.match(msg, "A possible location for ([^.]*) has been marked on your map\."))
+    local foundNpcName = string.match(msg, "A possible location for (.+) has been marked on your map\.")
     if (not isEmpty(foundNpcName)) then
-        printDebug('Possible location for ' .. foundNpcName)
+        --printDebug('Possible location for ' .. foundNpcName .. ".")
         return true
     else
-        printDebug('No possible location')
+        --printDebug('No possible location.')
         return false
     end
 end
 
 local function npcWrongName(msg)
-    printDebug("npcWrongName("..(msg or "nil")..")")
+    --printDebug("npcWrongName("..(msg or "nil")..")")
     if (msg == "Couldn't find a creature with that name at all. Make sure you entered the exact name with correct capitalization.") then
-        printDebug('Wrong NPC name')
+        --printDebug('Wrong NPC name')
         return true
     else
-        printDebug('Right NPC name')
+        --printDebug('Right NPC name')
         return false
     end
 end
 
 local function searchingTooFast(msg)
-    printDebug("searchingTooFast("..(msg or "nil")..")")
+    --printDebug("searchingTooFast("..(msg or "nil")..")")
     if (msg == "Please wait a while longer before using this command again.") then
         printDebug('Searching too fast.')
         return true
@@ -177,15 +197,19 @@ end
 
 local function updateNpcToNext()
     printDebug("updateNpcToNext()")
-    if (#npcTrackerDB.trackingList == 0) then
+    --prettyPrintError("Previously tracking element number: " .. (ns.trackingListCurrentIndex or "nil"))
+    if (#ns.npcTrackerDB.trackingList == 0) then
         ns.trackingListCurrentIndex = nil
-        npcTrackerDB.trackingNpcName = nil
-    elseif (ns.trackingListCurrentIndex == #npcTrackerDB.trackingList) then
-        ns.trackingListCurrentIndex = 1
+        ns.npcTrackerDB.trackingNpcName = nil
     else
-        ns.trackingListCurrentIndex = ns.trackingListCurrentIndex + 1
+        if (ns.trackingListCurrentIndex == #ns.npcTrackerDB.trackingList) then
+            ns.trackingListCurrentIndex = 1
+        else
+            ns.trackingListCurrentIndex = (ns.trackingListCurrentIndex or 0) + 1
+        end
+        ns.npcTrackerDB.trackingNpcName = ns.npcTrackerDB.trackingList[ns.trackingListCurrentIndex]
     end
-    npcTrackerDB.trackingNpcName = npcTrackerDB.trackingList[ns.trackingListCurrentIndex]
+    --prettyPrintError("Now tracking element number: " .. (ns.trackingListCurrentIndex or "nil"))
 end
 
 local function setTimerInterval(newTimerInterval)
@@ -197,6 +221,11 @@ local function setTimerInterval(newTimerInterval)
     else
         prettyPrintError("Wrong new timer interval value: " .. (newTimerInterval or "nil") .. ".")
     end
+end
+
+local function toggleDebug()
+    printDebug("toggleDebug()")
+    ns.npcTrackerDB.debugMode = not ns.npcTrackerDB.debugMode
 end
 
 local function resetNpcTrackerDB()
@@ -226,10 +255,12 @@ ns.removeNpcFromTrackingList = removeNpcFromTrackingList
 ns.clearTrackingList = clearTrackingList
 ns.listTrackingList = listTrackingList
 ns.npcFound = npcFound
+ns.npcFoundAway = npcFoundAway
 ns.npcPossibleLocation = npcPossibleLocation
 ns.npcPossibleLocation = npcPossibleLocation
 ns.npcWrongName = npcWrongName
 ns.searchingTooFast = searchingTooFast
 ns.updateNpcToNext = updateNpcToNext
 ns.setTimerInterval = setTimerInterval
+ns.toggleDebug = toggleDebug
 ns.resetNpcTrackerDB = resetNpcTrackerDB
