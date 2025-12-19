@@ -1,5 +1,8 @@
 local addonName, ns = ...
 
+BINDING_HEADER_NPCTRACKERADDON = "NpcTracker AddOn"
+BINDING_NAME_OPENWORLDMAP = "Open original World Map"
+
 ns.npcTrackerDB = {
     trackingName = "",
     trackingList = {},

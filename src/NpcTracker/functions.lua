@@ -33,6 +33,15 @@ function indexOf(array, value)
     return nil
 end
 
+function toggleWorldMap()
+    printDebug("toggleWorldMap()")
+    if (WorldMapFrame:IsVisible()) then
+        WorldMapFrame:Hide()
+    else
+        WorldMapFrame:Show()
+    end
+end
+
 local function registerEvents()
     printDebug("registerEvents()")
     ns.eventsFrame:RegisterEvent("CHAT_MSG_SYSTEM")
@@ -252,6 +261,7 @@ ns.isEmpty = isEmpty
 ns.indexOf = indexOf
 ns.registerEvents = registerEvents
 ns.unregisterEvents = unregisterEvents
+ns.toggleWorldMap = toggleWorldMap
 ns.stopTracking = stopTracking
 ns.startTrackingList = startTrackingList
 ns.trackNpc = trackNpc

@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="OPENWORLDMAP" description="Opens Blizard's World Map." header="NPCTRACKERADDON" default="CTRL-M">
+		toggleWorldMap()
+	</Binding>
+</Bindings>
