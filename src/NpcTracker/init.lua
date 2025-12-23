@@ -7,7 +7,7 @@ ns.npcTrackerDB = {
     trackingName = "",
     trackingList = {},
     timerInterval = 5, -- in seconds
-    debugMode = true,
+    debugMode = false,
 }
 
 ns.TrackingModeTypes = {
@@ -26,4 +26,5 @@ ns.possibleLocationSkip = false
 
 ns.eventsFrame = CreateFrame('Frame', 'NpcTrackerEventsFrame', UIParent)
 ns.eventsFrame:RegisterEvent("ADDON_LOADED")
+
 ns.eventsFrame:RegisterEvent("PLAYER_LOGOUT")
